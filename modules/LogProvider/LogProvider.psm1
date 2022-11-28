@@ -9,7 +9,7 @@ class LogSettings {
     }
 
     static Write ([string]$Message, [string]$Level) {
-        $Message = "{0:yyyy-MM-dd HH:mi:ss} | {1} | {2}" -f [datetime]::Now, $Level.PadRight(5),  $Message
+        $Message = "{0:yyyy-MM-dd HH:mm:ss} | {1} | {2}" -f [datetime]::Now, $Level.PadRight(5),  $Message
         Write-Host $Message
         $file = [LogSettings]::GetFileName()
         $Message | Out-File $file -Append -Encoding utf8        
