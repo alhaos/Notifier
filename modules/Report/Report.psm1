@@ -86,7 +86,6 @@ select rd.* from RAW_DATA rd
             $testDr.Close()
 
             if ($rep.TestArray.Count){
-                Write-Debug ($rep | ConvertTo-Json)
                 $this.Reps += , $rep
             }
         }
@@ -157,13 +156,11 @@ select rd.* from RAW_DATA rd
             }
             $testDr.Close()
 
-            Write-Debug ($Client | ConvertTo-Json)
             $this.Clients += , $Client
         }
         $dr.Close()
     }
 }
-
 
 class Rep {
     [string]$Name
@@ -179,6 +176,23 @@ class Client {
     [string[]]$Cc
     [string[]]$Bcc
     [Test[]]$TestArray
+
+    [string]$Header = @"
+    <title>Client report</title>
+    <style>
+        td,
+        th {
+            border-style: solid;
+            border-color: black;
+            border-width: 3px;
+        }
+    </style>
+"@
+
+    [string] GetHtmlBody () {
+        $table = $this.TestArray | ConvertTo-Html -Fragment 
+        return ConvertTo-Html -Body "$table" -Head $this.Header
+    }
 }
 
 Class Test {
